@@ -1,5 +1,8 @@
 Write your reflection here.
 
+The most instructive struggle in this assignment was in process_files.py, working through the difference between session state persisting correctly and widgets displaying stale state. My tests were failing with ('0', '0') instead of the expected counts even though the file was clearly being processed — the JSON was written, and the summary text appeared. That mismatch was confusing at first because it looked like the session-state accumulation logic itself was broken, when the actual bug was about execution order within a single script run: I was drawing the st.metric() widgets before the code block that updated st.session_state.files_processed and st.session_state.packages_processed, so on the rerun triggered by the button click, the metrics rendered using the pre-update values from session_state, even though the update happened moments later in the same top-to-bottom execution.
+Where I'd like more practice: reasoning through the full order of operations in a Streamlit script before running it, rather than debugging that order after a test fails. I relied on the test failure and traceback to find the bug rather than predicting it by reading the script top-to-bottom first. Next time, I want to trace through what st.session_state looks like before and after each block, line by line, especially in apps with multiple session-state variables and conditional blocks, so I can catch ordering bugs like this proactively instead of reactively.
+
 See reflection.md for what makes a good reflection — be specific, use the
 terminology from this assignment (rerun, widget, return value, guard, bytes vs.
 text, decode, session state, initialise once, button-triggered, metric), and make
